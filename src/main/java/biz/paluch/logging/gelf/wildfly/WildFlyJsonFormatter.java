@@ -213,6 +213,14 @@ public class WildFlyJsonFormatter extends ExtFormatter {
         gelfMessageAssembler.setFilterStackTrace(filterStackTrace);
     }
 
+    public boolean isIncludeCallerLocation() {
+        return gelfMessageAssembler.isIncludeCallerLocation();
+    }
+
+    public void setIncludeCallerLocation(boolean includeCallerLocation) {
+        gelfMessageAssembler.setIncludeCallerLocation(includeCallerLocation);
+    }    
+
     public String getTimestampPattern() {
         return gelfMessageAssembler.getTimestampPattern();
     }

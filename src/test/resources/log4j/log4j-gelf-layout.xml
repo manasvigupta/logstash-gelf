@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+<log4j:configuration debug="true" xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender name="sysout" class="org.apache.log4j.ConsoleAppender">
         <layout class="biz.paluch.logging.gelf.log4j.GelfLayout"/>
@@ -22,8 +22,24 @@
             <param name="facility" value="test"/>
             <param name="extractStackTrace" value="true"/>
             <param name="filterStackTrace" value="true"/>
+            <param name="includeCallerLocation" value="true"/>
         </layout>
     </appender>
+
+    <appender name="callerLocationDisabled" class="biz.paluch.logging.gelf.log4j.TestAppender">
+        <layout class="biz.paluch.logging.gelf.log4j.GelfLayout">
+            <param name="fields" value="Severity, Time, LoggerName, NDC"/>
+            <param name="additionalFields" value="fieldName1=fieldValue1,fieldName2=fieldValue2"/>
+            <param name="mdcFields" value="mdcField1,mdcField2"/>
+            <param name="mdcProfiling" value="false"/>
+            <param name="includeFullMdc" value="false"/>
+            <param name="originHost" value="localhost"/>
+            <param name="facility" value="test"/>
+            <param name="extractStackTrace" value="true"/>
+            <param name="filterStackTrace" value="true"/>
+            <param name="includeCallerLocation" value="false"/>
+        </layout>
+    </appender>    
 
     <root>
         <priority value="DEBUG"/>
@@ -34,5 +50,9 @@
     <category name="biz.paluch.logging.gelf.log4j.configured" additivity="false">
         <appender-ref ref="configured"/>
     </category>
+    
+    <category name="biz.paluch.logging.gelf.log4j.callerLocationDisabled" additivity="false">
+        <appender-ref ref="callerLocationDisabled"/>
+    </category>    
 
 </log4j:configuration>

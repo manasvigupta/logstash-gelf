@@ -71,9 +71,22 @@ public class GelfLayoutUnitTests {
 
     @Test
     public void testConfiguration() throws Exception {
-
         logger = Logger.getLogger("biz.paluch.logging.gelf.log4j.configured");
+        testCommonConfiguration(logger);
+        Map<String, Object> message = getMessage();
+        assertThat(message).containsEntry("LoggerName", "biz.paluch.logging.gelf.log4j.configured");
+    }
 
+    @Test
+    public void testCallerLocationInfoIsDisabled() throws Exception {
+        logger = Logger.getLogger("biz.paluch.logging.gelf.log4j.callerLocationDisabled");
+        testCommonConfiguration(logger);
+        Map<String, Object> message = getMessage();
+        assertThat(message).containsEntry("LoggerName", "biz.paluch.logging.gelf.log4j.callerLocationDisabled");
+        assertThat(message).doesNotContainKeys("SourceMethodName", "SourceClassName", "SourceLineNumber", "SourceSimpleClassName");
+    }
+
+    private void testCommonConfiguration(Logger logger) {
         MDC.put("mdcField1", "mdcValue1");
         NDC.push("ndc message");
         logger.info("test1");
@@ -91,11 +104,10 @@ public class GelfLayoutUnitTests {
         assertThat(message).containsEntry("level", "6");
 
         assertThat(message).containsEntry("fieldName1", "fieldValue1");
-        assertThat(message).containsEntry("LoggerName", "biz.paluch.logging.gelf.log4j.configured");
+        
         if (Log4jUtil.isLog4jMDCAvailable()) {
             assertThat(message).containsEntry("mdcField1", "mdcValue1");
         }
-
         assertThat(message).containsKeys("timestamp", "MyTime");
     }
 

@@ -24,6 +24,7 @@ public class GelfLogAppenderUnitTests {
         sut.setExtractStackTrace("true");
         sut.setFacility(FACILITY);
         sut.setFilterStackTrace(true);
+        sut.setIncludeCallerLocation(false);
         sut.setGraylogHost(HOST);
         sut.setGraylogPort(GRAYLOG_PORT);
         sut.setMaximumMessageSize(MAXIMUM_MESSAGE_SIZE);
@@ -43,8 +44,8 @@ public class GelfLogAppenderUnitTests {
 
         assertThat(sut.getExtractStackTrace()).isEqualTo("true");
         assertThat(sut.isFilterStackTrace()).isTrue();
+        assertThat(sut.isIncludeCallerLocation()).isFalse();
         assertThat(sut.isIncludeFullMdc()).isTrue();
         assertThat(sut.isMdcProfiling()).isTrue();
     }
-
 }

@@ -210,6 +210,14 @@ public class GelfLogbackAppender extends AppenderBase<ILoggingEvent> implements 
         gelfMessageAssembler.setFilterStackTrace(filterStackTrace);
     }
 
+    public boolean isIncludeCallerLocation() {
+        return gelfMessageAssembler.isIncludeCallerLocation();
+    }
+
+    public void setIncludeCallerLocation(boolean includeCallerLocation) {
+        gelfMessageAssembler.setIncludeCallerLocation(includeCallerLocation);
+    }
+
     public boolean isMdcProfiling() {
         return gelfMessageAssembler.isMdcProfiling();
     }
@@ -249,5 +257,4 @@ public class GelfLogbackAppender extends AppenderBase<ILoggingEvent> implements 
     public void setVersion(String version) {
         gelfMessageAssembler.setVersion(version);
     }
-
 }

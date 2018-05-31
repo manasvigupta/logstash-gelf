@@ -234,6 +234,14 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
         gelfMessageAssembler.setFilterStackTrace(filterStackTrace);
     }
 
+    public boolean isIncludeCallerLocation() {
+        return gelfMessageAssembler.isIncludeCallerLocation();
+    }
+
+    public void setIncludeCallerLocation(boolean includeCallerLocation) {
+        gelfMessageAssembler.setIncludeCallerLocation(includeCallerLocation);
+    }
+
     public boolean isIncludeLogMessageParameters() {
         return gelfMessageAssembler.isIncludeLogMessageParameters();
     }

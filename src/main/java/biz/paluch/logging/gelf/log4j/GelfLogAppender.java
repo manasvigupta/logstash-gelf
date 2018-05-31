@@ -211,6 +211,14 @@ public class GelfLogAppender extends AppenderSkeleton implements ErrorReporter {
     public void setFilterStackTrace(boolean filterStackTrace) {
         gelfMessageAssembler.setFilterStackTrace(filterStackTrace);
     }
+    
+    public boolean isIncludeCallerLocation() {
+        return gelfMessageAssembler.isIncludeCallerLocation();
+    }
+
+    public void setIncludeCallerLocation(boolean includeCallerLocation) {
+        gelfMessageAssembler.setIncludeCallerLocation(includeCallerLocation);
+    }    
 
     public boolean isMdcProfiling() {
         return gelfMessageAssembler.isMdcProfiling();

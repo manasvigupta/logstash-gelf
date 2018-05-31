@@ -15,6 +15,7 @@
         <param name="Version" value="1.1" />
         <param name="Facility" value="java-test" />
         <param name="ExtractStackTrace" value="true" />
+        <param name="IncludeCallerLocation" value="true" />
         <param name="FilterStackTrace" value="true" />
         <param name="MdcProfiling" value="true" />
         <param name="TimestampPattern" value="yyyy-MM-dd HH:mm:ss,SSSS" />

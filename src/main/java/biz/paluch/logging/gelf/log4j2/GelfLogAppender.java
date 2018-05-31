@@ -210,6 +210,7 @@ public class GelfLogAppender extends AbstractAppender {
             @PluginAttribute("version") String version, @PluginAttribute("extractStackTrace") String extractStackTrace,
             @PluginAttribute("originHost") String originHost, @PluginAttribute("includeFullMdc") String includeFullMdc,
             @PluginAttribute("facility") String facility, @PluginAttribute("filterStackTrace") String filterStackTrace,
+            @PluginAttribute("includeCallerLocation") String includeCallerLocation,
             @PluginAttribute("mdcProfiling") String mdcProfiling,
             @PluginAttribute("maximumMessageSize") String maximumMessageSize,
             @PluginAttribute("additionalFieldTypes") String additionalFieldTypes,
@@ -266,6 +267,13 @@ public class GelfLogAppender extends AbstractAppender {
 
         if (filterStackTrace != null) {
             mdcGelfMessageAssembler.setFilterStackTrace("true".equals(filterStackTrace));
+        }
+        
+        if (includeCallerLocation != null && "false".equalsIgnoreCase(includeCallerLocation)) {
+            //disable only when explicitly specified, otherwise, property is enabled by default
+            mdcGelfMessageAssembler.setIncludeCallerLocation(false);
+        } else {
+            mdcGelfMessageAssembler.setIncludeCallerLocation(true);
         }
 
         if (mdcProfiling != null) {

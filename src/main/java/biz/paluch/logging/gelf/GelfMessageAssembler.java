@@ -47,6 +47,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
     private String facility;
     private boolean includeLogMessageParameters = true;
     private StackTraceExtraction stackTraceExtraction = StackTraceExtraction.OFF;
+    private boolean includeCallerLocation = true;
     private int maximumMessageSize = 8192;
 
     private List<MessageField> fields = new ArrayList<MessageField>();
@@ -97,6 +98,14 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         setExtractStackTrace(propertyProvider.getProperty(PropertyProvider.PROPERTY_EXTRACT_STACKTRACE));
         setFilterStackTrace("true".equalsIgnoreCase(propertyProvider.getProperty(PropertyProvider.PROPERTY_FILTER_STACK_TRACE)));
 
+        String includeCallerLocation = propertyProvider
+                .getProperty(PropertyProvider.PROPERTY_INCLUDE_CALLER_LOCATION);
+        if (includeCallerLocation != null
+                && "false".equalsIgnoreCase(includeCallerLocation)) {
+            //disable only when explicitly specified, otherwise, property is enabled by default
+            setIncludeCallerLocation(false);
+        }
+
         String includeLogMessageParameters = propertyProvider
                 .getProperty(PropertyProvider.PROPERTY_INCLUDE_LOG_MESSAGE_PARAMETERS);
         if (includeLogMessageParameters != null && !includeLogMessageParameters.trim().equals("")) {
@@ -146,6 +155,12 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         builder.withAdditionalFieldTypes(additionalFieldTypes);
 
         for (MessageField field : fields) {
+            if (!includeCallerLocation 
+                    && field instanceof LogMessageField && isCallerLocationField(((LogMessageField) field).getNamedLogField())) {
+                //exclude caller location attributes from being logged
+                continue;
+            }
+            
             Values values = getValues(logEvent, field);
             if (values == null || !values.hasValues()) {
                 continue;
@@ -182,6 +197,14 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         return builder.build();
     }
 
+    private boolean isCallerLocationField(LogMessageField.NamedLogField field) {
+        return  
+        LogMessageField.NamedLogField.SourceClassName == field
+        || LogMessageField.NamedLogField.SourceLineNumber == field
+        || LogMessageField.NamedLogField.SourceMethodName == field
+        || LogMessageField.NamedLogField.SourceSimpleClassName == field;
+    }
+    
     private Values getValues(LogEvent logEvent, MessageField field) {
 
         if (field instanceof StaticMessageField) {
@@ -304,6 +327,14 @@ public class GelfMessageAssembler implements HostAndPortProvider {
 
     public void setFacility(String facility) {
         this.facility = facility;
+    }
+
+    public boolean isIncludeCallerLocation() {
+        return includeCallerLocation;
+    }
+
+    public void setIncludeCallerLocation(boolean includeCallerLocation) {
+        this.includeCallerLocation = includeCallerLocation;
     }
 
     public boolean isExtractStackTrace() {
